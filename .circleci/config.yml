@@ -36,8 +36,8 @@ jobs:
           name: Build application Docker image
           command: |
             docker build \
-              --cache-from=void-pgo-base \
-              -t innovanon/void-pgo-base \
+              --cache-from=void-base-pgo \
+              -t innovanon/void-base-pgo \
               --build-arg TEST=1 .
       - deploy:
           name: Push application Docker image
@@ -46,16 +46,7 @@ jobs:
               #docker tag lfs-builder "InnovAnon-Inc/lfs-builder:${CIRCLE_SHA1}"
               #docker push           "InnovAnon-Inc/lfs-builder:${CIRCLE_SHA1}"
               docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-              docker push innovanon/void-pgo-base
-            fi
-      - run:
-          name: Push upstream (void-fdo)
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              curl --location --request POST \
-                'https://circleci.com/api/v2/project/github/InnovAnon-Inc/void-fdo/pipeline' \
-                --header 'Content-Type: application/json' \
-                -u "${API_TOKEN}:"
+              docker push innovanon/void-base-pgo
             fi
       - run:
           name: Push upstream (void-pgo)
